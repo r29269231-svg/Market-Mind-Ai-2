@@ -1,6 +1,6 @@
 # railway.yaml
 services:
-  # --- FRONTEND (Next.js + pnpm) ---
+  # --- FRONTEND (Next.js with pnpm) ---
   - name: marketmind-frontend
     sourceDir: agent-starter-react-main
     build:

@@ -3,7 +3,7 @@ services:
   - type: web
     name: marketmind-frontend
     env: node
-    rootDir: agent-starter-react
+    rootDir: agent-starter-react-main
     buildCommand: "pnpm install"
     startCommand: "pnpm dev"
     plan: free

@@ -27,19 +27,19 @@ export async function POST(req: Request) {
     const body = await req.json().catch(() => ({}));
     const agentName: string | undefined = body?.room_config?.agents?.[0]?.agent_name;
 
-    // Create random room and participant
+    // Generate random room and participant
     const participantName = 'user';
     const participantIdentity = `voice_assistant_user_${Math.floor(Math.random() * 10000)}`;
     const roomName = `voice_assistant_room_${Math.floor(Math.random() * 10000)}`;
 
-    // Create the participant token
+    // Create participant token
     const participantToken = await createParticipantToken(
       { identity: participantIdentity, name: participantName },
       roomName,
       agentName
     );
 
-    // Send connection details back to frontend
+    // Return connection details
     const data: ConnectionDetails = {
       serverUrl: LIVEKIT_URL,
       roomName,
@@ -47,11 +47,15 @@ export async function POST(req: Request) {
       participantToken,
     };
 
-    const headers = new Headers({ 'Cache-Control': 'no-store' });
-    return NextResponse.json(data, { headers });
+    return NextResponse.json(data, {
+      headers: { 'Cache-Control': 'no-store' },
+    });
   } catch (err: any) {
     console.error('Error creating LiveKit token:', err);
-    return new NextResponse(err.message || 'Internal Server Error', { status: 500 });
+    return NextResponse.json(
+      { error: err.message || 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
 

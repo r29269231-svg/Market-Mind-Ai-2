@@ -1,0 +1,28 @@
+# railway.yaml
+services:
+  # --- FRONTEND (Next.js + pnpm) ---
+  - name: marketmind-frontend
+    sourceDir: agent-starter-react-main
+    build:
+      builder: nodejs
+      buildCommand: pnpm install 
+      startCommand: pnpm dev
+    envVars:
+      LIVEKIT_URL: wss://schoolproject-lfkh4pp3.livekit.cloud
+      NEXT_PUBLIC_LIVEKIT_URL: wss://schoolproject-lfkh4pp3.livekit.cloud
+      NEXT_PUBLIC_TOKEN_ENDPOINT: /api/connect/route.ts
+      LIVEKIT_API_KEY: ${LIVEKIT_API_KEY}
+      LIVEKIT_API_SECRET: ${LIVEKIT_API_SECRET}
+
+  # --- BACKEND (Python agent worker) ---
+  - name: marketmind-backend
+    sourceDir: agent-starter-python
+    build:
+      builder: python
+      buildCommand: uv run python src/agent.py download-files
+      startCommand: uv run python src/agent.py start
+    envVars:
+      LIVEKIT_URL: wss://schoolproject-lfkh4pp3.livekit.cloud
+      LIVEKIT_API_KEY: ${LIVEKIT_API_KEY}
+      LIVEKIT_API_SECRET: ${LIVEKIT_API_SECRET}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
